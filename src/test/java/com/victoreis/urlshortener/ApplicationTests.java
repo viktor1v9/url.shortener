@@ -1,4 +1,4 @@
-package com.victoreis.url.shortener;
+package com.victoreis.urlshortener;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
