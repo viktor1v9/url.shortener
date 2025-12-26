@@ -30,8 +30,8 @@ public class UrlController {
             Url shortUrl = urlService.createShortUrl(request.getOriginalUrl());
 
             CreateUrlResponse response = new CreateUrlResponse(
-                    shortUrl.getOriginalUrl(),
-                    shortUrl.getShortCode()
+                    shortUrl.getShortCode(),
+                    shortUrl.getOriginalUrl()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
