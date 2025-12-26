@@ -2,6 +2,11 @@ package com.victoreis.urlshortener;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+
+import com.victoreis.urlshortener.entity.Url;
+import com.victoreis.urlshortener.service.UrlService;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -25,4 +30,11 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+	@Bean
+	CommandLineRunner commandLineRunner(UrlService urlService) {
+		return args -> {
+			Url shortUrl = urlService.createShortUrl("https://www.example.com/some/very/long/url");
+			System.out.println("SHORTCODE GERADO: " + shortUrl.getShortCode());
+		};
+	}
 }

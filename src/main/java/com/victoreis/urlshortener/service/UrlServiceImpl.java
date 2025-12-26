@@ -1,9 +1,13 @@
 package com.victoreis.urlshortener.service;
 
+import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
+
 import com.victoreis.urlshortener.entity.Url;
 import com.victoreis.urlshortener.repository.UrlRepository;
 import com.victoreis.urlshortener.util.ShortCodeGenerator;
 
+@Service
 public class UrlServiceImpl implements UrlService {
 
     private final UrlRepository repository;
@@ -23,6 +27,8 @@ public class UrlServiceImpl implements UrlService {
         Url shortUrl = new Url();
         shortUrl.setOriginalUrl(originalUrl);
         shortUrl.setShortCode(shortCode);
+        shortUrl.setAccessCount(0L);
+        shortUrl.setCreatedAt(LocalDateTime.now());
 
         return repository.save(shortUrl);
     }
