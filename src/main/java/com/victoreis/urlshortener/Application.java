@@ -9,20 +9,32 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class Application {
 
 	public static void main(String[] args) {
+		// Tenta carregar o .env, mas ignora se não existir (ex: ambiente Docker)
 		Dotenv dotenv = Dotenv.configure()
-		.directory("./.env")
-		.filename(".env")
-		.load();
-		System.setProperty("PORT", dotenv.get("PORT", dotenv.get("SERVER_PORT")));
-		System.setProperty("DB_URL", dotenv.get("DB_URL"));
-		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
-		System.setProperty("DB_DRIVER", dotenv.get("DB_DRIVER"));
-		System.setProperty("JPA_DDL_AUTO", dotenv.get("JPA_DDL_AUTO"));
-		System.setProperty("JPA_SHOW_SQL", dotenv.get("JPA_SHOW_SQL"));
-		System.setProperty("JPA_OPEN_IN_VIEW", dotenv.get("JPA_OPEN_IN_VIEW"));
+			.ignoreIfMissing()
+			.load();
+		
+		// Só define as propriedades se estiverem no .env e não já definidas no sistema
+		setPropertyIfPresent("SERVER_PORT", dotenv);
+		setPropertyIfPresent("DB_URL", dotenv);
+		setPropertyIfPresent("DB_USERNAME", dotenv);
+		setPropertyIfPresent("DB_PASSWORD", dotenv);
+		setPropertyIfPresent("DB_DRIVER", dotenv);
+		setPropertyIfPresent("JPA_DDL_AUTO", dotenv);
+		setPropertyIfPresent("JPA_SHOW_SQL", dotenv);
+		setPropertyIfPresent("JPA_OPEN_IN_VIEW", dotenv);
 
 		SpringApplication.run(Application.class, args);
 	}
 
+	private static void setPropertyIfPresent(String key, Dotenv dotenv) {
+		// Prioriza variáveis de ambiente do sistema, depois .env
+		String value = System.getenv(key);
+		if (value == null) {
+			value = dotenv.get(key);
+		}
+		if (value != null) {
+			System.setProperty(key, value);
+		}
+	}
 }

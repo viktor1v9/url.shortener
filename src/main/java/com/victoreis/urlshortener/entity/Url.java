@@ -3,6 +3,7 @@ package com.victoreis.urlshortener.entity;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.Instant;
 
 @Entity
 @Table(
@@ -15,7 +16,6 @@ import lombok.*;
 @Setter 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 
 public class Url {
     
@@ -33,8 +33,8 @@ public class Url {
     private LocalDateTime createdAt;
 
     @Column(name = "expires_at")
-    private LocalDateTime expiresAt;
+    private Instant expiresAt;
 
     @Column(name = "access_count", nullable = false)
-    private Long accessCount;
+    private long accessCount = 0;
 }
